@@ -1,0 +1,43 @@
+%dw 2.0
+output application/json
+
+type moeda = String { format: "#,##0.00", locale: "PT-BR"}
+type pointC6 = String { format: "#,##0.00", locale: "PT-BR"}
+
+var realConvertidoEmPontosC6 = 32.1459821429
+
+var totalReaisGastoDebito = 0.00
+var totalReaisGastoCredito = 20.00
+
+var pontosPorRealGastoNoCredito = 0.28
+var pontosPorRealGastoNoDebito = 0.10 
+
+var BonusC6Carbon = 600
+var BonusPixC6 = 100
+
+var totalPontosGeradosDebito = ( pontosPorRealGastoNoDebito * totalReaisGastoDebito)
+var totalPontosGeradosCredito = (pontosPorRealGastoNoCredito * totalReaisGastoCredito)
+var totaoPontosAcumulados = totalPontosGeradosDebito + totalReaisGastoCredito + BonusC6Carbon + BonusPixC6
+
+---
+"Calculadora de Pontos C6 Bank":
+{
+    
+    "Gastos":{
+    "Total em Reais Gastos no Debito" : totalReaisGastoDebito as moeda,
+    "Total em Reais Gastos no Credito" : totalReaisGastoCredito as moeda 
+    },
+
+    "Pontos" : {
+    "Bonus C6 Carbon": BonusC6Carbon as pointC6,
+    "Bonus C6": BonusPixC6 as pointC6,
+    "Total de Pontos Gerados no Debito" :  totalPontosGeradosDebito as pointC6,
+    "Total de Pontos Gerados no Credito" : totalPontosGeradosCredito as pointC6
+    },
+
+    "Resumo":{
+    "Total de Pontos C6 Acumulados" : totaoPontosAcumulados as pointC6,
+    "1 Real Convertido em Pontos C6": realConvertidoEmPontosC6 as pointC6,
+    "Total em Reais Gerados" : (totaoPontosAcumulados / realConvertidoEmPontosC6) as moeda
+    }
+}
